@@ -1,13 +1,7 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import ListagemProdutos from '@/components/ListagemProdutos.vue';
 </script>
 
 <template>
- 
-
-  <RouterView />
+  <ListagemProdutos />
 </template>
-
-<style scoped>
-
-</style>
