@@ -1,6 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import api from '@/plugins/axios'
+import { useScreen } from '@/composables/screen';
+
+const { browserWidth, deviceWidth, isMobile } = useScreen();
 
 const produtos = ref([]);
 
@@ -14,9 +17,13 @@ const formatPrice = (price) => `R$ ${price.toFixed(2).replace('.', ',')}`;
 
 <template>
   <div>
-    <h1>Produtos</h1>
+    <h1>
+       Produtos - {{ browserWidth }} - {{ deviceWidth }} - {{
+      isMobile}} 
+      <span v-if="isMobile">É móvel</span>
+    </h1>
     <div class="container">
-      <div class="card" v-for="produto in produtos" :key="produto.id">
+      <div :class="isMobile == true ? 'cardMobile card' : 'cardDesktop card' " v-for="produto in produtos" :key="produto.id">
         <h1 class="card--title">{{ produto.title }}</h1>
         <p>{{ produto.description }}</p>
         <p>{{ formatPrice(produto.price) }}</p>
@@ -26,6 +33,24 @@ const formatPrice = (price) => `R$ ${price.toFixed(2).replace('.', ',')}`;
   </div>
 </template>
 <style scoped>
+@media (max-width: 768px) {
+  .container {
+    gap: 0.5rem;
+  }
+
+}
+.cardDesktop {
+    width: 22rem;
+    background-color: red;
+    transition: .3s;
+
+  }
+.cardMobile{
+  background-color: blue;
+    width: 92%;
+  transition: .3s;
+}
+
 .container {
   display: flex;
   flex-wrap: wrap;
@@ -42,7 +67,6 @@ const formatPrice = (price) => `R$ ${price.toFixed(2).replace('.', ',')}`;
   flex-direction: column;
   width: 15rem;
   height: 25rem;
-  background: #fff;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   border-radius: 10px;
   margin: auto;
